@@ -20,25 +20,33 @@ on défini les conditions de victoires: si enchainement de 3 X sur 123 ou 147 ou
 // variables globales
 let nbTour = 0;
 let playerClass = "circle"
-let isPlayerOTurn;
+let isPlayerOTurn = false;
+
+// querySelector
+const $board = document.querySelector(".board"); 
+const $cell = document.querySelectorAll(".cell");
+const $entry = document.querySelector(".entry");
+const $joueur1 = document.querySelector("#joueur1");
+const $joueur2 = document.querySelector("#joueur2");
+const $jouer = document.querySelector("#jouer");
+
+/* Partie 1: gestion de l'affichage */
+// fonctions globales
+const definitionHover = () => {
+    $cell.forEach(cell => {
+        $board.classList.add(playerClass);
+    })
+}
 const changeUser = () => {
     playerClass = (playerClass === "circle") ? "x" : "circle";
     console.log(playerClass);
     $board.classList.remove("circle");
-        $board.classList.remove("x");
-        $board.classList.add(playerClass);
+    $board.classList.remove("x");
+    $entry.innerHTML = `C'est à ${isPlayerOTurn === true ? joueur1 : joueur2} de jouer.`;
+    definitionHover();
+    isPlayerOTurn = (isPlayerOTurn === true) ? false: true;
+
 }
-
-// on défini les querySelector
-const $board = document.querySelector(".board"); 
-const $cell = document.querySelectorAll(".cell");
-
-
-
-
-
-// on défini les eventListener
-
 
 
 // on autorise les cellules à être remplie, mais juste une fois
@@ -48,22 +56,44 @@ $cell.forEach(cell => {
         cellElement => {
             nbTour++;
             console.log(`tours joués ${nbTour}`);
-            console.log(nbTour%2); 
             cellElement.target.classList.add(playerClass);
            changeUser ();                   
         },
         {once : true});
 })
 
-$cell.forEach(cell => {
-    $board.classList.add(playerClass);
+
+/* partie 2: récupération du nom des joueurs */
+// on crée un tableau avec l'id des joueurs mais le nom est vide
+let joueur1 = "";
+let joueur2 = "";
+
+/*
+//on désactive le bouton, on le réactivera si les deux input sont remplis
+$jouer.disabled = true;
+
+const activateButton = () => {
+        $jouer.removeAttribute("disabled");
+}*/
+
+
+$jouer.addEventListener("click", () => {
+    if ($joueur1.value.trim() === "") return;
+    if ($joueur2.value.trim() === "") return;
+    joueur1 = $joueur1.value;
+    joueur2 = $joueur2.value;
+    $joueur1.value = "";
+    $joueur2.value = "";
+    removeInput();
 })
 
-// on (essaie)  de récupèrer l'id de l'élément cliqué
-/*
-const getDataAttribute = () => {
-    $board(document).on("click", ".cell", function () {
-        let varID = $(this).attr('data-cell');
-        console.log(varID);
-    })
-}*/
+
+removeInput = () => {
+    if (joueur1 !== "" && joueur2 !== "") {
+        $entry.innerHTML = `C'est à ${joueur1} de jouer.`;
+        definitionHover();
+    } 
+}
+
+
+
