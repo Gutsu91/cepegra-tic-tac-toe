@@ -22,13 +22,15 @@ let nbTour = 0;
 let playerClass = "circle"
 let isPlayerOTurn;
 const changeUser = () => {
-    playerClass = (playerClass === "circle") ? "x" : "circle"
-    console.log(playerClass)
+    playerClass = (playerClass === "circle") ? "x" : "circle";
+    console.log(playerClass);
+    $board.classList.remove("circle");
+        $board.classList.remove("x");
+        $board.classList.add(playerClass);
 }
 
 // on défini les querySelector
 const $board = document.querySelector(".board"); 
-const $cellBoard = document.querySelector(".cell")
 const $cell = document.querySelectorAll(".cell");
 
 
@@ -37,20 +39,7 @@ const $cell = document.querySelectorAll(".cell");
 
 // on défini les eventListener
 
-$cell.forEach(cell => {
-    cell.addEventListener(
-        "mouseover", 
-        eventHover => {
-            if (nbTour % 2 === 0) {
-                $board.classList.add("circle");
-                $board.classList.remove("x");
-            } else {
-                $board.classList.add("x");
-                $board.classList.remove("circle")
-            }
-            
-            }
-    )})
+
 
 // on autorise les cellules à être remplie, mais juste une fois
 $cell.forEach(cell => {
@@ -60,16 +49,15 @@ $cell.forEach(cell => {
             nbTour++;
             console.log(`tours joués ${nbTour}`);
             console.log(nbTour%2); 
-            if (nbTour % 2 === 1) {
-                cellElement.target.classList.add("circle");
-            } else {
-                cellElement.target.classList.add("x");  
-            }
+            cellElement.target.classList.add(playerClass);
            changeUser ();                   
         },
         {once : true});
 })
 
+$cell.forEach(cell => {
+    $board.classList.add(playerClass);
+})
 
 // on (essaie)  de récupèrer l'id de l'élément cliqué
 /*
